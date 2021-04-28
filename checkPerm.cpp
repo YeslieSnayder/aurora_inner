@@ -5,7 +5,7 @@ using std::filesystem::directory_iterator;
 
 string getPermission(struct stat &params, bool &has_user, bool &has_group) {
     string res;
-    if (has_user && has_group ||
+    if (!has_user && !has_group ||
             has_user && (params.st_mode & S_IWUSR) == 0 ||
             has_group && (params.st_mode & S_IWGRP) == 0) // no access
         return "";
@@ -13,7 +13,7 @@ string getPermission(struct stat &params, bool &has_user, bool &has_group) {
     switch (params.st_mode & S_IFMT) {  // type of a file
         case S_IFREG: res.append("f "); break; // regular file
         case S_IFDIR: res.append("d "); break; // directory
-        case S_IFLNK: res.append("l "); break; // soft link
+        case S_IFLNK: return "";    // soft link
     }
     return res;
 }
