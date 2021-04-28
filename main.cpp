@@ -1,5 +1,8 @@
-#include <iostream>
+#include <unistd.h>
+#include <grp.h>
+#include <pwd.h>
 #include <vector>
+#include <iostream>
 
 #include "checkPerm.h"
 
@@ -37,6 +40,15 @@ int main(int argc, const char *argv[]) {
     string path, username, group_name;
     if (!initParams(argc, argv, path, username, group_name))
         return -1;
+
+    if (!group_name.empty()) {
+        group *gr = getgrnam(group_name.c_str());
+        setgid(gr->gr_gid);
+    }
+    if (!username.empty()) {
+        passwd *user = getpwnam(username.c_str());
+        setuid(user->pw_uid);
+    }
 
     vector<string> paths = checkPerm(path, username, group_name);
     for (string &s : paths) {
