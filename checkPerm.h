@@ -13,6 +13,6 @@ using namespace std;
  * @param group_name - group for which the program will check file access.
  * @return the list with absolute path and type of files which the user or group have an access.
  */
-vector<string> checkPerm(string path, string username, string group_name);
+vector<string> checkPerm(string path, bool has_user, bool has_group);
 
 #endif
